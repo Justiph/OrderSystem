@@ -1,0 +1,7 @@
+.gradle
+build
+.idea
+uploads
+gradle.properties
+*.iml
+Dockerfile
