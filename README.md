@@ -1,4 +1,4 @@
-# Product Ordering System - Fullstack Assessment
+# Product Ordering System
 
 This project is a fullstack solution for a simple product ordering system assessment. It is organized as a monorepo containing both the Spring Boot backend and the React frontend, connected through RESTful APIs and runnable with Docker Compose.
 
@@ -11,6 +11,7 @@ The project implements all required screens and workflows from the assessment:
 Admins can manage products through a dedicated admin interface.
 
 Implemented features:
+
 - View product list
 - View product information
 - Add new products
@@ -24,6 +25,7 @@ Implemented features:
 Users can browse available products and create orders from the frontend.
 
 Implemented features:
+
 - Product catalog page
 - Product detail page
 - Add to cart
@@ -36,6 +38,7 @@ Implemented features:
 Admins can view submitted orders from the admin dashboard.
 
 Implemented features:
+
 - View all orders
 - View order details
 - Display customer name, order status, total price, creation time, and ordered items
@@ -98,6 +101,42 @@ ordersystem/
     src/
   docker-compose.yml
   README.md
+```
+
+## Database Schema ERD
+
+```mermaid
+erDiagram
+    PRODUCTS {
+        BIGINT id PK
+        VARCHAR name
+        TEXT description
+        DECIMAL price
+        INTEGER stock
+        VARCHAR image_url
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        BOOLEAN is_deleted
+    }
+
+    ORDERS {
+        BIGINT id PK
+        VARCHAR customer_name
+        DECIMAL total_price
+        VARCHAR status
+        TIMESTAMP created_at
+    }
+
+    ORDER_ITEMS {
+        BIGINT id PK
+        BIGINT order_id FK
+        BIGINT product_id FK
+        INTEGER quantity
+        DECIMAL price
+    }
+
+    ORDERS ||--o{ ORDER_ITEMS : contains
+    PRODUCTS ||--o{ ORDER_ITEMS : purchased_as
 ```
 
 ## Running the Project with Docker
