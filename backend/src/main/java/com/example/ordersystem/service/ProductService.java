@@ -24,9 +24,9 @@ public class ProductService {
     public PagedResponseDto<ProductResponseDto> getAllProducts(String keyword, Pageable pageable) {
         Page<Product> productPage;
         if (keyword != null && !keyword.trim().isEmpty()) {
-            productPage = productRepository.findByNameContainingIgnoreCase(keyword, pageable);
+            productPage = productRepository.findByNameContainingIgnoreCaseAndDeletedFalse(keyword, pageable);
         } else {
-            productPage = productRepository.findAll(pageable);
+            productPage = productRepository.findByDeletedFalse(pageable);
         }
 
         PagedResponseDto<ProductResponseDto> response = new PagedResponseDto<>();
@@ -73,9 +73,10 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException("Product not found with id: " + id);
-        }
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+
+        product.setDeleted(true);
+        productRepository.save(product);
     }
 }
