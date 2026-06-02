@@ -17,7 +17,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins("http://localhost:5173", "http://localhost", "http://127.0.0.1")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -25,8 +25,11 @@ public class WebConfig {
 
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                // Lấy đường dẫn tuyệt đối đến thư mục 'uploads' nằm ở gốc của dự án
                 String uploadPath = Paths.get("uploads").toAbsolutePath().toUri().toString();
+
+                if (!uploadPath.endsWith("/")) {
+                    uploadPath += "/";
+                }
 
                 registry.addResourceHandler("/uploads/**")
                         .addResourceLocations(uploadPath);
